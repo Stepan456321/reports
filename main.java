@@ -113,4 +113,47 @@ public class main extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("report")) {
-            if (
+            if (args.length < 2) {
+                sender.sendMessage("Использование: /report <Нарушитель> <Причина>");
+                return true;
+            }
+
+            String violator = args[0];
+            String reason = String.join(" ", args).substring(violator.length() + 1);
+            LocalDateTime date = LocalDateTime.now();
+
+            Report report = new Report(violator, reason, date);
+            reportCache.put(violator, report);
+
+            sender.sendMessage("Репорт отправлен!");
+            id++;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private record Report(String violator, String reason, LocalDateTime date) {
+
+    }
+
+    public FileConfiguration onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        for (Player player1 : Bukkit.getOnlinePlayers()) {
+            Report reportsCount = reportCache.asMap().getOrDefault(player.getName());
+            if (reportsCount > 2) {
+                player.setWalkSpeed(0);
+
+
+                player.sendMessage(chatMessage);
+
+                player.sendTitle(titleMessage, "");
+            }
+
+        }
+
+        return null;
+    }
+}
+
