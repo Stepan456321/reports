@@ -18,6 +18,8 @@ import org.jooq.impl.DSL;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -25,7 +27,6 @@ import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import static net.minecraft.server.v1_12_R1.PlayerSelector.getPlayer;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.table;
 
@@ -40,6 +41,7 @@ public class main extends JavaPlugin {
     private Connection connection;
     private DSLContext dslContext;
     public int id = 1;
+    private PlayerJoinEvent event;
 
     @Override
     public void onEnable() {
@@ -50,9 +52,9 @@ public class main extends JavaPlugin {
         }
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
-        InputStream defConfigStream = getResource("config.yml");
+        InputStream defConfigStream = getClass().getResourceAsStream("config.yml");
         if (defConfigStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, StandardCharsets.UTF_8));
             config.setDefaults(defConfig);
         }
 
@@ -138,22 +140,19 @@ public class main extends JavaPlugin {
 
     }
 
-    public FileConfiguration onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        for (Player player1 : Bukkit.getOnlinePlayers()) {
-            Report reportsCount = reportCache.asMap().getOrDefault(player.getName());
-            if (reportsCount > 2) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        this.event = event;
+        Cache<String, Integer> reportCache = Caffeine.newBuilder().build();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            Integer reportsCount = reportCache.getIfPresent(player.getName());
+            if (reportsCount != null  && reportsCount > 2) {
                 player.setWalkSpeed(0);
-
-
                 player.sendMessage(chatMessage);
-
                 player.sendTitle(titleMessage, "");
             }
-
         }
-
-        return null;
     }
-}
 
+
+
+}
