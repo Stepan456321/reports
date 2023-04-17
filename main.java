@@ -1,4 +1,4 @@
-package org.example;
+ppackage org.example;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -153,6 +153,6 @@ public class main extends JavaPlugin {
         }
     }
 
-}
+
 
 }
