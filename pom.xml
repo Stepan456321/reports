@@ -38,32 +38,7 @@
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <version>3.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.kord.cache</groupId>
-            <artifactId>cache-caffeine</artifactId>
-            <version>0.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.kord.cache</groupId>
-            <artifactId>cache-caffeine</artifactId>
-            <version>0.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
             <version>3.1.5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cb372</groupId>
-            <artifactId>scalacache-caffeine_3</artifactId>
-            <version>1.0.0-M6</version>
-        </dependency>
-        <dependency>
-            <groupId>io.kamon</groupId>
-            <artifactId>kamon-caffeine_2.13</artifactId>
-            <version>2.6.0</version>
         </dependency>
     </dependencies>
     <profiles>
